@@ -7,7 +7,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       flash[:notice] = "Welcome to Alpha Blog #{@user.username}, You have Successfully Sign Up"
-      redirect_to articles_path
+      redirect_to users_path
     else
       render :new, status: :unprocessable_entity
     end
@@ -21,7 +21,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     if @user.update(user_params)
       flash[:notice] = "#{@user.username} your Profile has been updated Successfully"
-      redirect_to articles_path
+      redirect_to users_path
     else
       render :edit, status: :unprocessable_entity
     end
@@ -29,6 +29,10 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+  end
+
+  def index
+    @users = User.all
   end
 
   private

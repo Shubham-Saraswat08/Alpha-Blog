@@ -5,12 +5,20 @@
         <div class="row g-0">
           <div class="col-md-4 text-center text-white bg-primary d-flex flex-column align-items-center justify-content-center"
             style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
-            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-              alt="Avatar" class="img-fluid my-5" style="width: 80px;" />
+            <img src="https://bootdey.com/img/Content/avatar/avatar<%= @user.id %>.png"
+                alt="Avatar"
+                class="img-fluid rounded-circle my-5"
+                style="width: 100px;" />
             <h5 class="mb-3"><%= @user.username %></h5>
-            <%= link_to edit_user_path(@user), class: 'mb-4', style: 'color: black; text-decoration: none;' do %>
-              <i class="fas fa-edit"></i>
-            <% end %>
+            <div class="d-flex gap-4">
+              <%= link_to edit_user_path(@user), class: 'mb-4', style: 'color: black; text-decoration: none;' do %>
+                <i class="fas fa-edit"></i>
+              <% end %>
+              <%= link_to users_path, class: 'mb-4', style: 'color: black; text-decoration: none;' do %>
+                <i class="fas fa-arrow-left me-2"></i>
+              <% end %>
+            </div>
+
           </div>
           <div class="col-md-8">
             <div class="card-body p-4">
