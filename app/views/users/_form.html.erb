@@ -21,6 +21,7 @@
         </div>
       </div>
 
+
       <div class="row mb-3">
         <div class="col-2">
           <%= f.label :password, class: "form-label text-light" %>
@@ -32,7 +33,7 @@
 
 
       <div class="d-flex justify-content-center mb-3">
-        <%= f.submit "Sign Up", class: "btn btn-outline-light btn-lg"%>
+        <%= f.submit(@user.new_record? ? "Sign Up" : "Update Profile", class: "btn btn-outline-light btn-lg")%>
       </div>
       <% end %>
     <div class="d-flex justify-content-center">
