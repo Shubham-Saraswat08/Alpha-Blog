@@ -1,7 +1,10 @@
 class ArticlesController < ApplicationController
   before_action :set_article, only: [ :show, :edit, :update, :destroy ]
+  before_action :required_user, except: [ :index, :show ]
+  before_action :authorize_article, only: [ :edit, :update, :destroy ]
 
   def home
+    redirect_to articles_path if logged_in?
   end
 
   def about
@@ -19,7 +22,7 @@ class ArticlesController < ApplicationController
 
   def create
     @article = Article.new(article_params)
-    @article.user = User.first
+    @article.user = current_user
     if @article.save
       flash[:notice] = "Article created Successfully"
       redirect_to article_path(@article)
@@ -49,6 +52,18 @@ private
 
 def set_article
   @article = Article.find(params[:id])
+end
+
+def required_user
+  unless logged_in?
+    redirect_to login_path, alert: "You must be Logged In to perform this action"
+  end
+end
+
+def authorize_article
+  unless @article.user == current_user
+    redirect_to @article, alert: "You are not authorized to perform this action."
+  end
 end
 
 def article_params

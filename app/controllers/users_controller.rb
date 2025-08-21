@@ -1,4 +1,8 @@
 class UsersController < ApplicationController
+  before_action :set_user, only: [ :show, :edit, :update ]
+  before_action :required_user, only: [ :edit, :update ]
+  before_action :authorize_user, only: [ :edit, :update ]
+
   def new
     @user = User.new
   end
@@ -6,7 +10,8 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      flash[:notice] = "Welcome to Alpha Blog #{@user.username}, You have Successfully Sign Up"
+      session[:user_id] = @user.id
+      flash[:notice] = "Welcome to Alpha Blog #{@user.username}, You have Successfully Signed Up"
       redirect_to users_path
     else
       render :new, status: :unprocessable_entity
@@ -14,11 +19,9 @@ class UsersController < ApplicationController
   end
 
   def edit
-    @user = User.find(params[:id])
   end
 
   def update
-    @user = User.find(params[:id])
     if @user.update(user_params)
       flash[:notice] = "#{@user.username} your Profile has been updated Successfully"
       redirect_to @user
@@ -28,7 +31,6 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.find(params[:id])
     @articles = @user.articles.paginate(page: params[:page], per_page: 2)
   end
 
@@ -39,5 +41,21 @@ class UsersController < ApplicationController
   private
   def user_params
     params.require(:user).permit(:username, :email, :password)
+  end
+
+  def set_user
+    @user = User.find(params[:id])
+  end
+
+  def required_user
+    unless logged_in?
+      redirect_to login_path, alert: "You must be Logged In to perform this action"
+    end
+  end
+
+  def authorize_user
+    unless @user == current_user
+      redirect_to @user, alert: "You are not authorized to perform this action."
+    end
   end
 end
