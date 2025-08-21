@@ -1,28 +1,31 @@
 <h1 class="text-center mt-4">Article Listing Page</h1>
 <div class="container">
-  <% @articles.each do |x| %>
   <div class="row justify-content-center">
-    <div class="col-8 mt-4">
-      <div class="card text-center shadow mb-5 rounded mint-color">
-        <div class="card-header fst-italic">
-          by <%= x.user.username if x.user%>
-        </div>
-        <div class="card-body">
-          <h5>
-            <%= link_to "#{x.title}", article_path(x), class: "card-title text-decoration-none text-success" %>
-          </h5>
-          <p class="card-text"><%= truncate(x.description, length: 100) %></p>
-          <div class="d-flex gap-2 justify-content-center">
-          <%= button_to "View", article_path(x), method: :get, class: "btn btn-outline-success" %>
-          <%= button_to "Edit", edit_article_path(x), method: :get, class: "btn btn-outline-primary" %>
-          <%= button_to "Delete", article_path(x), method: :delete, class: "btn btn-outline-danger" %>
+    <% @articles.each do |x| %>
+      <div class="col-6 mt-4">
+        <div class="card text-center shadow rounded mint-color">
+          <div class="card-header fst-italic">
+            by <%= link_to x.user.username, user_path(x.user), class:"text-decoration-none text-primary" if x.user%>
+          </div>
+          <div class="card-body">
+            <h5>
+              <%= link_to "#{x.title}", article_path(x), class: "card-title text-decoration-none text-success" %>
+            </h5>
+            <p class="card-text"><%= truncate(x.description, length: 100) %></p>
+            <div class="d-flex gap-2 justify-content-center">
+            <%= button_to "View", article_path(x), method: :get, class: "btn btn-outline-success" %>
+            <%= button_to "Edit", edit_article_path(x), method: :get, class: "btn btn-outline-primary" %>
+            <%= button_to "Delete", article_path(x), method: :delete, class: "btn btn-outline-danger" %>
+            </div>
+          </div>
+          <div class="card-footer text-body-secondary">
+            <small>Created about <%= time_ago_in_words(x.created_at) %> ago, Edited about <%= time_ago_in_words(x.updated_at) %> ago</small>
           </div>
         </div>
-        <div class="card-footer text-body-secondary">
-          <small>Created about <%= time_ago_in_words(x.created_at) %> ago, Edited about <%= time_ago_in_words(x.updated_at) %> ago</small>
-        </div>
       </div>
+    <% end %>
+    <div class="apple_pagination">
+      <%= will_paginate @articles, :container => false %>
     </div>
   </div>
-  <% end %>
 </div>

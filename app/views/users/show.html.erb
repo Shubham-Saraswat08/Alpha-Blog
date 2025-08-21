@@ -15,7 +15,7 @@
                 <i class="fas fa-edit"></i>
               <% end %>
               <%= link_to users_path, class: 'mb-4', style: 'color: black; text-decoration: none;' do %>
-                <i class="fas fa-arrow-left me-2"></i>
+                <i class="fas fa-home me-2"></i>
               <% end %>
             </div>
 
@@ -33,12 +33,13 @@
               <hr class="mt-0 mb-4">
               <div class="d-flex justify-content-between pt-1 mb-3">
                 <div>
-                  <h6>Recent</h6>
-                  <p class="text-muted mb-0">Lorem ipsum</p>
+                  <h6>Total Articles</h6>
+                  <p class="text-muted mb-0"><%= pluralize(@articles.count, "article") %></p>
                 </div>
                 <div>
-                  <h6>Most Viewed</h6>
-                  <p class="text-muted mb-0">Dolor sit amet</p>
+                  <%# <h6>Most Viewed</h6>
+                  <p class="text-muted mb-0">Dolor sit amet</p> %>
+                  <%= button_to "Create Article", new_article_path, method: :get, class: "btn btn-outline-primary" %>
                 </div>
               </div>
 
@@ -55,12 +56,10 @@
   </div>
 
   <div class="row">
-    <% @user.articles.each do |article| %>
+    <% @articles.each do |article| %>
       <div class="col-6 mb-4">
         <div class="card text-center shadow mb-5 rounded mint-color">
-          <div class="card-header fst-italic">
-            by <%= article.user.username if article.user %>
-          </div>
+          <h5 class="card-header text-decoration-none text-success"><%= article.title %></h5>
           <div class="card-body">
             <div class="card-text text-start"><%= simple_format(article.description) %></div>
             <div class="d-flex gap-2 justify-content-center">
@@ -75,5 +74,8 @@
         </div>
       </div>
     <% end %>
+    <div class="apple_pagination">
+      <%= will_paginate @articles, :container => false %>
+    </div>
   </div>
 </div>

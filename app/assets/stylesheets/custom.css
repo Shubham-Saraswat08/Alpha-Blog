@@ -33,11 +33,11 @@
   background-color: black !important
 }
 
-.nav-link{
+.nav-link {
   color: white !important;
 }
 
-#logo{
+#logo {
   float: left;
   font-size: 1.7em;
   color: #fff !important;
@@ -46,7 +46,7 @@
   font-weight: bold;
 }
 
-#home-container{
+#home-container {
   margin-top: 25px;
 }
 
@@ -67,94 +67,141 @@ body {
   flex: 1 0 auto;
 }
 
-.grey-color{
+.grey-color {
   background-color: #E5E5E5;
 }
 
-.mint-color{
+.mint-color {
   background-color: #EFF2F1;
 }
 
-.form-color{
+.form-color {
   background-color: #598392;
 }
 
-.link-color{
+.link-color {
   color: #598392;
 }
 
-#sticky-footer{
+#sticky-footer {
 
   flex-shrink: none;
 }
 
 /* ////////////////////////////////////////////////////////// User Index ///////////////////////////////////////////////// */
-body{
-    margin-top:20px;
-    background:#eee;    
+body {
+  margin-top: 20px;
+  background: #eee;
 }
+
 a {
-    color: #f96332;
+  color: #f96332;
 }
-.m-t-5{
-    margin-top: 5px;   
+
+.m-t-5 {
+  margin-top: 5px;
 }
+
 .card {
-    background: #fff;
-    margin-bottom: 30px;
-    transition: .5s;
-    border: 0;
-    border-radius: .1875rem;
-    display: inline-block;
-    position: relative;
-    width: 100%;
-    box-shadow: none;
+  background: #fff;
+  margin-bottom: 30px;
+  transition: .5s;
+  border: 0;
+  border-radius: .1875rem;
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  box-shadow: none;
 }
+
 .card .body {
-    font-size: 14px;
-    color: #424242;
-    padding: 20px;
-    font-weight: 400;
+  font-size: 14px;
+  color: #424242;
+  padding: 20px;
+  font-weight: 400;
 }
+
 .profile-page .profile-header {
-    position: relative
+  position: relative
 }
 
 .profile-page .profile-header .profile-image img {
-    border-radius: 50%;
-    width: 140px;
-    border: 3px solid #fff;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)
+  border-radius: 50%;
+  width: 140px;
+  border: 3px solid #fff;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)
 }
 
 .profile-page .profile-header .social-icon a {
-    margin: 0 5px
+  margin: 0 5px
 }
 
 .profile-page .profile-sub-header {
-    min-height: 60px;
-    width: 100%
+  min-height: 60px;
+  width: 100%
 }
 
 .profile-page .profile-sub-header ul.box-list {
-    display: inline-table;
-    table-layout: fixed;
-    width: 100%;
-    background: #eee
+  display: inline-table;
+  table-layout: fixed;
+  width: 100%;
+  background: #eee
 }
 
 .profile-page .profile-sub-header ul.box-list li {
-    border-right: 1px solid #e0e0e0;
-    display: table-cell;
-    list-style: none
+  border-right: 1px solid #e0e0e0;
+  display: table-cell;
+  list-style: none
 }
 
 .profile-page .profile-sub-header ul.box-list li:last-child {
-    border-right: none
+  border-right: none
 }
 
 .profile-page .profile-sub-header ul.box-list li a {
-    display: block;
-    padding: 15px 0;
-    color: #424242
+  display: block;
+  padding: 15px 0;
+  color: #424242
+}
+
+/* /////////////////////////////////// Pagination ///////////////////////////////////////////////////// */
+.apple_pagination {
+  background: #f1f1f1;
+  border: 1px solid #e5e5e5;
+  text-align: center;
+  padding: 1em;
+  cursor: default;
+}
+
+.apple_pagination a,
+.apple_pagination span {
+  padding: 0.2em 0.3em;
+}
+
+.apple_pagination .disabled {
+  color: #aaaaaa;
+}
+
+.apple_pagination .current {
+  font-style: normal;
+  font-weight: bold;
+  background-color: #bebebe;
+  display: inline-block;
+  width: 1.4em;
+  height: 1.4em;
+  line-height: 1.5;
+  -moz-border-radius: 1em;
+  -webkit-border-radius: 1em;
+  border-radius: 1em;
+  text-shadow: rgba(255, 255, 255, 0.8) 1px 1px 1px;
+}
+
+.apple_pagination a {
+  text-decoration: none;
+  color: black;
+}
+
+.apple_pagination a:hover,
+.apple_pagination a:focus {
+  text-decoration: underline;
 }
