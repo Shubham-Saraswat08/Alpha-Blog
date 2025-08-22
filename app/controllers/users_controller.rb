@@ -1,7 +1,8 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [ :show, :edit, :update, :destroy ]
-  before_action :required_user, only: [ :edit, :update ]
-  before_action :authorize_user, only: [ :edit, :update, :destroy ]
+  before_action :required_user, except: [ :index, :show ]
+  before_action :admin_user, only: [ :destroy ]
+  before_action :authorize_user, only: [ :edit, :update ]
 
   def new
     @user = User.new
@@ -40,8 +41,8 @@ class UsersController < ApplicationController
 
   def destroy
     @user.destroy
-    session[:user_id] = nil
-    redirect_to users_path, notice: "User #{@user.username} is successfully deleted along with its articles"
+    session[:user_id] = nil if @user == current_user
+    redirect_to users_path, alert: "User #{@user.username} is successfully deleted along with its articles"
   end
 
   private
@@ -60,7 +61,13 @@ class UsersController < ApplicationController
   end
 
   def authorize_user
-    unless @user == current_user
+    if @user != current_user
+      redirect_to @user, alert: "You are not authorized to perform this action."
+    end
+  end
+
+  def admin_user
+    if @user != current_user && !current_user.admin?
       redirect_to @user, alert: "You are not authorized to perform this action."
     end
   end

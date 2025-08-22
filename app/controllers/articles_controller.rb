@@ -44,7 +44,7 @@ class ArticlesController < ApplicationController
 
   def destroy
     @article.destroy
-    redirect_to articles_path, notice: "Article deleted successfully."
+    redirect_to articles_path, alert: "Article deleted successfully."
   end
 end
 
@@ -61,7 +61,7 @@ def required_user
 end
 
 def authorize_article
-  unless @article.user == current_user
+  if current_user != @article.user && !current_user.admin?
     redirect_to @article, alert: "You are not authorized to perform this action."
   end
 end
