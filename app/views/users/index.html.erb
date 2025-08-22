@@ -1,25 +1,41 @@
 <div class="container">
-  <div class="row">
-    <h1 class="text-center my-4">Alpha Bloggers</h1>
+  <div class="row justify-content-center">
+    <h1 class="text-center my-4 display-5 fw-semibold">Alpha Bloggers</h1>
+
     <% @users.each do |user| %>
-      <div class="col-md-6 mb-4">
-        <div class="card h-100 shadow-sm border-0 d-flex flex-column justify-content-center">
-          <div class="row g-0">
-            <div class="col-md-4 d-flex align-items-center justify-content-center">
-              <img src="https://bootdey.com/img/Content/avatar/avatar<%= user.id %>.png"
-                  class="rounded-circle"
-                  alt="User Avatar"
-                  style="width: 140px; height: 140px; object-fit: cover;" />
+      <div class="col-md-5 mb-3">
+        <div class="card h-100 shadow-lg border-0 rounded-4 overflow-hidden">
+          <div class="row g-0 h-100">
+            <!-- Avatar Column -->
+            <div class="col-md-4 bg-light d-flex align-items-center justify-content-center p-3 align-self-stretch">
+              <% avatar_number = (user.id % 8) == 0 ? 8 : (user.id % 8) %>
+              <img src="https://bootdey.com/img/Content/avatar/avatar<%= avatar_number %>.png"
+                class="rounded-circle border border-3 border-primary"
+                alt="User Avatar"
+                style="width: 120px; height: 120px; object-fit: cover;" />
             </div>
+
+            <!-- Info Column -->
             <div class="col-md-8">
-              <div class="card-body">
-                <h5 class="card-title mb-1 fw-bold"><%= user.username %></h5>
-                <p class="text-muted mb-2"><%= user.email %></p>
-                <p class="small mb-3 text-muted"><strong><%= pluralize(user.articles.count, "article") %></strong></p>
-                <p class="small mb-3 text-muted">Joined <%= time_ago_in_words(user.created_at) %></p>
-                <div class="mb-3 d-flex gap-3">
-                  <%= link_to "View Profile", user_path(user), class: "btn btn-outline-success" %>
-                  <%= link_to "Edit Profile", edit_user_path(user), class: "btn btn-outline-primary" if logged_in? && user == current_user %>
+              <div class="card-body px-4 py-3 d-flex flex-column justify-content-between h-100">
+                <div>
+                  <h5 class="card-title mb-1 fw-bold text-dark"><%= user.username %></h5>
+                  <p class="text-muted mb-2 small">📧 <%= user.email %></p>
+
+                  <div class="mb-2">
+                    <span class="badge bg-primary-subtle text-primary fw-semibold">
+                      <%= pluralize(user.articles.count, "Article") %>
+                    </span>
+                  </div>
+
+                  <p class="text-muted small mb-3">🕒 Joined <%= time_ago_in_words(user.created_at) %> ago</p>
+                </div>
+
+                <div class="d-flex gap-2 mt-2">
+                  <%= link_to "View Profile", user_path(user), class: "btn btn-sm btn-success px-3" %>
+                  <% if logged_in? && user == current_user %>
+                    <%= link_to "Edit Profile", edit_user_path(user), class: "btn btn-sm btn-outline-primary px-3" %>
+                  <% end %>
                 </div>
               </div>
             </div>
@@ -27,8 +43,10 @@
         </div>
       </div>
     <% end %>
-    <div class="apple_pagination">
-      <%= will_paginate @users, :container => false %>
+
+    <!-- Pagination -->
+    <div class="apple_pagination mt-4 text-center">
+      <%= will_paginate @users, container: false, class: "pagination justify-content-center" %>
     </div>
   </div>
 </div>
