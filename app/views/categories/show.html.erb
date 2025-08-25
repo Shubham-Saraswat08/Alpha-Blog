@@ -1,0 +1,28 @@
+<%# Assuming you have a @category instance variable %>
+
+<div class="container my-5">
+  <% accent_colors = {
+    "Action" => "#f94144",
+    "Adventure" => "#f3722c",
+    "Isekai" => "#f9c74f",
+    "Comedy" => "#90be6d",
+    "Drama" => "#577590"
+    # add more as needed or fallback color below
+  } %>
+
+  <% color = accent_colors[@category.name.titleize] || "#4a90e2" %>
+
+  <div class="category-show-card bg-white rounded shadow-sm p-4" style="border-left: 8px solid <%= color %>;">
+    <h1 class="mb-3" style="color: <%= color %>;">
+      <%= @category.name.titleize %>
+    </h1>
+
+    <%# Add description if you have one, otherwise just placeholder %>
+    <p class="text-muted fs-5">
+      This section can include a description of the "<%= @category.name.titleize %>" genre or category.
+      You might add info about typical shows, popular themes, or anything else relevant.
+    </p>
+
+    <%= link_to "← Back to Genres", categories_path, class: "btn btn-outline-secondary mt-4" %>
+  </div>
+</div>

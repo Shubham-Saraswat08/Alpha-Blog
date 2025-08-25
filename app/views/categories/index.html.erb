@@ -1,0 +1,19 @@
+<h1 class="text-center my-4">Categories or Genres</h1>
+
+<div class="container">
+  <div class="row g-4 justify-content-center">
+    <% accent_colors = ['#f94144', '#f3722c', '#f9c74f', '#90be6d', '#577590'] %>
+
+    <% @categories.each_with_index do |category, i| %>
+      <% accent_color = accent_colors[i % accent_colors.length] %>
+
+      <div class="col-6 col-md-4 col-lg-3">
+        <%= link_to category_path(category), class: "text-decoration-none" do %>
+          <div class="genre-tile bg-white rounded shadow-sm p-3 d-flex align-items-center" style="border-left: 6px solid <%= accent_color %>;">
+            <span class="genre-name fs-5 fw-semibold text-dark"><%= category.name.titleize %></span>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
