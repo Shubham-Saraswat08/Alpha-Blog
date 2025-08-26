@@ -11,16 +11,15 @@ class CategoriesTest < ApplicationSystemTestCase
   end
 
   test "should create category" do
-    visit categories_url
-    click_on "New Category" # Usually capitalization matters for button/link text
+    visit new_category_url
 
-    fill_in "Name", with: "New Category" # Add filling in required fields
-
+    fill_in "Name", with: "New Category"
     click_on "Create Category"
 
     assert_text "Category was successfully created"
-    click_on "Back"
+    click_on "← Back to Genres"
   end
+
 
   test "should update category" do
     visit category_url(@category)

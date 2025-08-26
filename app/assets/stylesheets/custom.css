@@ -76,7 +76,8 @@ body {
 }
 
 .form-color {
-  background-color: #598392;
+  /* background-color: #598392; */
+  background-color: #000;
 }
 
 .link-color {
@@ -205,3 +206,14 @@ a {
 .apple_pagination a:focus {
   text-decoration: underline;
 }
+
+/* /////////////////////////////////////////////////// button ////////////////////////////////////////////////////// */
+.btn-outline-success.shadow-sm:hover {
+    box-shadow: 0 4px 12px rgba(25, 135, 84, 0.4) !important;
+  }
+  .btn-outline-primary.shadow-sm:hover {
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.4) !important;
+  }
+  .btn-outline-danger.shadow-sm:hover {
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4) !important;
+  }

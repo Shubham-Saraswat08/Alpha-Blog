@@ -6,6 +6,7 @@
         <div class="card text-center shadow rounded mint-color">
           <div class="card-header fst-italic">
             by <%= link_to x.user.username, user_path(x.user), class:"text-decoration-none text-primary" if x.user%>
+            <%= render "/categories/category", categories: x.categories %>
           </div>
           <div class="card-body">
             <h5>

@@ -1,0 +1,10 @@
+<div class="mt-2 d-flex flex-wrap justify-content-center">
+  <% if categories.any? %>
+    <% categories.each do |badge| %>
+      <span class="d-inline-flex align-items-center me-2 mb-2 px-3 py-1 fw-semibold text-dark bg-white rounded-pill shadow-sm"
+            style="border: 1px solid #ccc; border-left: 6px solid <%= color_for_category(badge) %>; font-size: 0.875rem;">
+        <%= link_to badge.name.titleize, category_path(badge), class: "text-decoration-none text-dark" %>
+      </span>
+    <% end %>
+  <% end %>
+</div>
