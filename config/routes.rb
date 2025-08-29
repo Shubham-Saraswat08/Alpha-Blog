@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root "articles#home"
+  root "users#new"
   resources :articles
   get "signup", to: "users#new"
   resources :users, except: [ :new ]

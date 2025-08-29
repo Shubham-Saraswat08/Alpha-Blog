@@ -67,7 +67,9 @@
     <% end %>
   </div>
 
-  <div class="apple_pagination mt-4 text-center">
-    <%= will_paginate @users, container: false, class: "pagination justify-content-center" %>
-  </div>
+  <% if @users.total_pages > 1 %>
+    <div class="apple_pagination mt-4 text-center">
+      <%= will_paginate @users, container: false, class: "pagination justify-content-center" %>
+    </div>
+  <% end %>
 </div>

@@ -94,9 +94,10 @@
       </div>
     <% end %>
 
-    <!-- Pagination -->
-    <div class="apple_pagination">
-      <%= will_paginate @articles, container: false %>
+   <% if @articles.total_pages > 1 %>
+      <div class="apple_pagination">
+        <%= will_paginate @articles, container: false %>
+      </div>
     </div>
-  </div>
+  <% end %>
 </div>

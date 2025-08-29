@@ -27,8 +27,11 @@
         </div>
       </div>
     <% end %>
-    <div class="apple_pagination">
-      <%= will_paginate @articles, :container => false %>
-    </div>
+
+    <% if @articles.total_pages > 1 %>
+      <div class="apple_pagination">
+        <%= will_paginate @articles, :container => false %>
+      </div>
+    <% end %>
   </div>
 </div>

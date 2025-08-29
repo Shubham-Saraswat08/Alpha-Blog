@@ -2,18 +2,28 @@
 
 <div class="container">
   <div class="row g-4 justify-content-center">
-
     <% @categories.each do |category| %>
       <div class="col-6 col-md-4 col-lg-3">
-        <%= link_to category_path(category), class: "text-decoration-none" do %>
-          <div class="bg-white rounded-pill shadow-sm px-4 py-3 d-flex align-items-center justify-content-center"
-               style="border: 1px solid #ccc; border-left: 6px solid <%= color_for_category(category) %>; border-top: 6px solid <%= color_for_category(category) %>;">
-            <span class="fs-5 fw-semibold text-dark"><%= category.name.titleize %></span>
-          </div>
-        <% end %>
+        <div class="bg-white rounded-pill shadow-sm px-4 py-3 position-relative text-center"
+             style="border: 1px solid #ccc; border-left: 6px solid <%= color_for_category(category) %>; border-top: 6px solid <%= color_for_category(category) %>;">
+
+          <%= link_to category_path(category), class: "text-decoration-none text-dark d-inline-block" do %>
+            <span class="fs-5 fw-semibold"><%= category.name.titleize %></span>
+          <% end %>
+
+          <% if logged_in? && current_user.admin? %>
+            <%= link_to edit_category_path(category), class: "text-secondary position-absolute", title: "Edit", style: "top: 50%; right: 20px; transform: translateY(-50%);" do %>
+              <i class="fas fa-edit"></i>
+            <% end %>
+          <% end %>
+        </div>
       </div>
     <% end %>
-    
+
+    <% if @categories.total_pages > 1 %>
+      <div class="apple_pagination">
+        <%= will_paginate @categories, :container => false, class: "mint-color"%>
+      </div>
+    <% end %>
   </div>
 </div>
-
