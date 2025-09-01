@@ -217,3 +217,47 @@ a {
   .btn-outline-danger.shadow-sm:hover {
     box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4) !important;
   }
+
+  /* Simplify Trix toolbar - hide buttons you don't want */
+
+trix-toolbar [data-trix-button-group="file-tools"],
+trix-toolbar [data-trix-button-group="history-tools"],
+trix-toolbar [data-trix-button-group="block-tools"] {
+  display: none !important;
+}
+
+/* Style buttons */
+trix-toolbar button {
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  margin: 0 0.1rem;
+  padding: 0.25rem 0.4rem;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+trix-toolbar button:hover,
+trix-toolbar button:focus {
+  background-color: #e2e6ea;
+  border-color: #adb5bd;
+  outline: none;
+}
+
+/* Style the editor area */
+trix-editor {
+  min-height: 150px;
+  border: 1px solid #ced4da;
+  border-radius: 0.375rem;
+  padding: 0.75rem;
+  background-color: white;
+  font-family: inherit;
+  font-size: 1rem;
+  box-shadow: none;
+  /* Make the editor's text color consistent */
+  color: #212529;
+}
+
+.grayscale-wrapper {
+  filter: grayscale(100%);
+  opacity: 0.85;
+}

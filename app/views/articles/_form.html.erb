@@ -15,10 +15,10 @@
 
         <div class="row mb-3">
           <div class="col-2">
-            <%= f.label :description, class: "form-label text-light" %>
+            <%= f.label :content, "Description", class: "form-label text-light" %>
           </div>
           <div class="col-10">
-            <%= f.text_area :description, class: "form-control shadow rounded", placeholder: "Description of Article", rows: 10 %>
+            <%= f.rich_text_area :content, class: "form-control shadow rounded", placeholder: "Description of Article", rows: 10 %>
           </div>
         </div>
 
