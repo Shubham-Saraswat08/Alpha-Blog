@@ -1,19 +1,33 @@
-<h1 class="text-center mt-4"><%= @article.title %></h1>
 <div class="container">
+    <% if is_blocked && @article.user == current_user %>
+      <div class="alert alert-danger text-center fw-semibold container">
+        <i class="fas fa-ban me-2"></i> This article "<%= @article.title %>" is currently unavailable because the author's profile is blocked.
+      </div>
+    <% elsif @article.is_blocked %>
+      <div class="alert alert-danger text-center fw-semibold container">
+        <i class="fas fa-ban me-2"></i>This article <%= @article.title %> is <strong>blocked</strong>.
+      </div>
+    <% end %>
+  <h1 class="text-center mt-4"><%= @article.title %></h1>
   <div class="row justify-content-center">
     <div class="col-8 mt-4">
-      <div class="card text-center shadow mb-5 rounded mint-color">
+      <div class="card text-center shadow mb-5 rounded mint-color <%= 'grayscale-wrapper' if (current_user.admin? || current_user == @article.user) && (is_blocked || @article.is_blocked)%>">
         <div class="card-header fst-italic">
           by <%= link_to @article.user.username, user_path(@article.user), class:"text-decoration-none text-primary" if @article.user%>
           <%= render "/categories/category", categories: @article.categories %>
         </div>
         <div class="card-body">
-          <div class="card-text text-start"><%= simple_format(@article.description) %></div>
+          <div class="card-text text-start pb-3"><%= @article.content.body.to_s.html_safe %></div>
           <div class="d-flex gap-2 justify-content-center">
-            <% if logged_in? && (@article.user == current_user || current_user.admin? ) %>
-              <%= button_to "Edit", edit_article_path(@article), method: :get, class: "btn btn-outline-primary" %>
-              <%= button_to "Delete", article_path(@article), method: :delete, class: "btn btn-outline-danger", data: { turbo_confirm: "Are you sure you want to delete this article?" } %>
-            <% end %>
+            <%= button_to "Edit", edit_article_path(@article), method: :get, class: "btn btn-outline-primary" if logged_in? && @article.user == current_user%>
+            <% if logged_in? && current_user.admin? && !@article.is_blocked && current_user != @article.user %>
+                <%= button_to "Block", block_article_path(@article), method: :post, class: "btn btn-outline-secondary", data: { turbo_confirm: "Are you sure you want to block this article?" } %>
+              <% end %>
+
+              <% if logged_in? && current_user.admin? && @article.is_blocked && current_user != @article.user %>
+                <%= button_to "Unblock", unblock_article_path(@article), method: :post, class: "btn btn-outline-secondary", data: { turbo_confirm: "Are you sure you want to unblock this article?" } %>
+              <% end %>
+            <%= button_to "Delete", article_path(@article), method: :delete, class: "btn btn-outline-danger", data: { turbo_confirm: "Are you sure you want to delete this article?" } if logged_in? && (current_user.admin? || @article.user == current_user) %>
           </div>
         </div>
         <div class="card-footer text-body-secondary">

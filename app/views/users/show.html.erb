@@ -1,5 +1,11 @@
-<div class="container pt-5 h-100">
-  <div class="d-flex justify-content-center align-items-start">
+<div class="container h-100">
+  <% if logged_in? && (current_user == @user || current_user.admin?) && @user.is_blocked %>
+    <div class="alert alert-danger position-relative text-center fw-semibold py-3 px-4">
+      <i class="fas fa-ban me-2"></i>
+      <%= current_user.admin? ? "This user is currently blocked" : "#{@user.username} your profile is currently blocked" %>
+    </div>
+  <% end %>
+  <div class="d-flex justify-content-center align-items-start pt-5 <%='grayscale-wrapper' if logged_in? && (current_user.admin? || current_user == @user) && @user.is_blocked%>">
     <div class="col-lg-6 mb-4">
       <div class="card mb-3" style="border-radius: .5rem;">
         <div class="row g-0">
@@ -16,6 +22,7 @@
               <%= link_to users_path, class: 'mb-4', style: 'color: white; text-decoration: none;' do %>
                 <i class="fas fa-home"></i>
               <% end %>
+
               <% if logged_in? %>
                 <% if @user == current_user %>
                   <%= link_to edit_user_path(@user), class: 'mb-4', style: 'color: white; text-decoration: none;' do %>
@@ -23,13 +30,36 @@
                   <% end %>
                 <% end %>
 
+                <% if current_user.admin? && current_user != @user%>
+                  <% if @user.is_blocked %>
+                    <%= button_to unblock_user_path(@user), method: :post,
+                          class: "btn btn-link p-0 m-0 align-baseline mb-4",
+                          data: { turbo_confirm: "Are you sure you want to unblock this user?" },
+                          style: "color: white; text-decoration: none;" do %>
+                      <i class="fas fa-unlock"></i>
+                    <% end %>
+                  <% else %>
+                    <%= button_to block_user_path(@user), method: :post,
+                          class: "btn btn-link p-0 m-0 align-baseline mb-4",
+                          data: { turbo_confirm: "Are you sure you want to block this user?" },
+                          style: "color: white; text-decoration: none;" do %>
+                      <i class="fas fa-user-slash"></i>
+                    <% end %>
+                  <% end %>
+                <% end %>
+
                 <% if @user == current_user || current_user.admin? %>
-                  <%= button_to user_path(@user), method: :delete, data: { turbo_confirm: "Are you sure you want to delete this user?" }, form_class: 'd-inline', class: 'btn btn-link p-0 m-0 align-baseline', style: 'color: white; text-decoration: none;' do %>
+                  <%= button_to user_path(@user), method: :delete,
+                        data: { turbo_confirm: "Are you sure you want to delete this user?" },
+                        form_class: 'd-inline',
+                        class: 'btn btn-link p-0 m-0 align-baseline mb-4',
+                        style: 'color: white; text-decoration: none;' do %>
                     <i class="fas fa-trash-alt"></i>
                   <% end %>
                 <% end %>
               <% end %>
             </div>
+
 
           </div>
           <div class="col-md-8">
@@ -54,10 +84,26 @@
                 </div>
               </div>
 
-              <div class="d-flex justify-content-start">
-                <a href="#" class="me-3"><i class="fab fa-facebook-f fa-lg text-secondary"></i></a>
-                <a href="#" class="me-3"><i class="fab fa-twitter fa-lg text-secondary"></i></a>
-                <a href="#"><i class="fab fa-instagram fa-lg text-secondary"></i></a>
+              <div class="d-flex justify-content-between">
+                <% if @articles.count > 0 %>
+                  <div>
+                    <span class="d-inline-flex align-items-center me-2 mb-2 px-3 py-1 fw-semibold text-secondary bg-white rounded-pill shadow-sm"
+                          style="border: 1px solid #ccc; border-left: 6px solid #28a745; font-size: 0.75rem;">
+                      <%= @articles.where(is_blocked: false).count %> visible
+                    </span>
+                    <span class="d-inline-flex align-items-center me-2 mb-2 px-3 py-1 fw-semibold text-secondary bg-white rounded-pill shadow-sm"
+                          style="border: 1px solid #ccc; border-left: 6px solid #dc3545; font-size: 0.75rem;">
+                      <%= @articles.where(is_blocked: true).count %> blocked
+                    </span>
+                  </div>
+                <% else %>
+                <div></div>
+                <% end %>
+                <div class="d-flex align-items-center">
+                <span class="me-3"><i class="fab fa-facebook-f fa-lg text-secondary"></i></span>
+                <span class="me-3"><i class="fab fa-twitter fa-lg text-secondary"></i></span>
+                <span class="me-3"><i class="fab fa-instagram fa-lg text-secondary"></i></span>
+                </div>
               </div>
             </div>
           </div>
@@ -69,29 +115,36 @@
   <!-- Articles List -->
   <div class="row">
     <% @articles.each do |article| %>
-      <div class="col-6 mb-4">
-        <div class="card text-center shadow mb-5 rounded mint-color">
-          <h5 class="card-header text-decoration-none text-success">
-            <i class="fas fa-heading me-2"></i><%= article.title %>
-            <%= render "/categories/category", categories: article.categories %>
-          </h5>
-          <div class="card-body">
-            <div class="card-text text-start"><%= simple_format(article.description) %></div>
-            <div class="d-flex gap-2 justify-content-center mt-3">
-              <%= button_to "View", article_path(article), method: :get, class: "btn btn-outline-success" %>
-              <% if logged_in? && (@user == current_user || current_user.admin?) %>
-                <%= button_to "Edit", edit_article_path(article), method: :get, class: "btn btn-outline-primary" %>
-                <%= button_to "Delete", article_path(article), method: :delete, class: "btn btn-outline-danger", data: { turbo_confirm: "Are you sure you want to delete this article?" } %>
-              <% end %>
+      <% if !article.is_blocked || current_user.admin? || current_user == article.user %>
+        <div class="col-6 mb-4">
+          <div class="card text-center shadow mb-5 rounded mint-color <%='grayscale-wrapper' if logged_in? && (current_user.admin? || current_user == @user) && article.is_blocked%>"">
+            <h5 class="card-header text-decoration-none text-success">
+              <i class="fas fa-heading me-2"></i><%= article.title %>
+              <%= render "/categories/category", categories: article.categories %>
+            </h5>
+            <div class="card-body">
+              <div class="card-text text-start pb-3"><%= article.content.body.to_s.html_safe %></div>
+              <div class="d-flex gap-2 justify-content-center mt-3">
+                <%= button_to "View", article_path(article), method: :get, class: "btn btn-outline-success" %>
+                <%= button_to "Edit", edit_article_path(article), method: :get, class: "btn btn-outline-primary" if logged_in? && @user == current_user %>
+                <% if logged_in? && current_user.admin? && !article.is_blocked && current_user != article.user %>
+                  <%= button_to "Block", block_article_path(article), method: :post, class: "btn btn-outline-secondary", data: { turbo_confirm: "Are you sure you want to block this article?" } %>
+                <% end %>
+
+                <% if logged_in? && current_user.admin? && article.is_blocked && current_user != article.user %>
+                  <%= button_to "Unblock", unblock_article_path(article), method: :post, class: "btn btn-outline-secondary", data: { turbo_confirm: "Are you sure you want to unblock this article?" } %>
+                <% end %>
+                <%= button_to "Delete", article_path(article), method: :delete, class: "btn btn-outline-danger", data: { turbo_confirm: "Are you sure you want to delete this article?" } if logged_in? && (current_user.admin? || @user == current_user) %>
+              </div>
+            </div>
+            <div class="card-footer text-body-secondary small">
+              <i class="far fa-clock me-1"></i>
+              Created <%= time_ago_in_words(article.created_at) %> ago |
+              Updated <%= time_ago_in_words(article.updated_at) %> ago
             </div>
           </div>
-          <div class="card-footer text-body-secondary small">
-            <i class="far fa-clock me-1"></i>
-            Created <%= time_ago_in_words(article.created_at) %> ago |
-            Updated <%= time_ago_in_words(article.updated_at) %> ago
-          </div>
         </div>
-      </div>
+      <% end %>
     <% end %>
 
    <% if @articles.total_pages > 1 %>

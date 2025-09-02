@@ -1,8 +1,14 @@
 <div class="container">
-  <% flash.each do |key,val| %>
-  <div class="alert <%= key == "notice" ? "alert-success" : "alert-danger"%> alert-dismissible fade show" role="alert">
-    <%= val %>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div>
+  <% flash.each do |key, val| %>
+    <% alert_class = key == "notice" ? "alert-success" : "alert-danger" %>
+    <div class="alert <%= alert_class %> alert-dismissible fade show text-center fw-semibold" role="alert">
+      <% if key == "notice" %>
+        <i class="fas fa-check-circle me-2"></i>
+      <% else %>
+        <i class="fas fa-ban me-2"></i>
+      <% end %>
+      <%= val %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
   <% end %>
 </div>

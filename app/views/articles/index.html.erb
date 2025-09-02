@@ -2,30 +2,7 @@
 <div class="container">
   <div class="row justify-content-center">
     <% @articles.each do |x| %>
-      <div class="col-6 mt-4">
-        <div class="card text-center shadow rounded mint-color">
-          <div class="card-header fst-italic">
-            by <%= link_to x.user.username, user_path(x.user), class:"text-decoration-none text-primary" if x.user%>
-            <%= render "/categories/category", categories: x.categories %>
-          </div>
-          <div class="card-body">
-            <h5>
-              <%= link_to "#{x.title}", article_path(x), class: "card-title text-decoration-none text-success" %>
-            </h5>
-            <p class="card-text"><%= truncate(x.description, length: 100) %></p>
-            <div class="d-flex gap-2 justify-content-center">
-            <%= button_to "View", article_path(x), method: :get, class: "btn btn-outline-success" %>
-            <% if logged_in? && (x.user == current_user || current_user.admin?) %>
-              <%= button_to "Edit", edit_article_path(x), method: :get, class: "btn btn-outline-primary" %>
-              <%= button_to "Delete", article_path(x), method: :delete, class: "btn btn-outline-danger", data: { turbo_confirm: "Are you sure you want to delete this article?" } %>
-            <% end %>
-            </div>
-          </div>
-          <div class="card-footer text-body-secondary">
-            <small>Created about <%= time_ago_in_words(x.created_at) %> ago, Edited about <%= time_ago_in_words(x.updated_at) %> ago</small>
-          </div>
-        </div>
-      </div>
+      <%= render "articles/profile_card", article: x %>
     <% end %>
 
     <% if @articles.total_pages > 1 %>

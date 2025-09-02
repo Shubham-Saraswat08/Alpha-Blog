@@ -5,7 +5,11 @@ class CategoriesController < ApplicationController
   end
   def show
     @category = Category.find(params[:id])
-    @categories_article = @category.articles.paginate(page: params[:page], per_page: 2)
+    if current_user.admin?
+      @categories_article = @category.articles.paginate(page: params[:page], per_page: 2)
+    else
+      @categories_article = @category.articles.where(is_blocked: false).paginate(page: params[:page], per_page: 2)
+    end
   end
   def new
     @category = Category.new
