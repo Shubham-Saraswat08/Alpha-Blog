@@ -18,10 +18,11 @@ class CategoriesController < ApplicationController
   def create
     @category = Category.new(params.require(:category).permit(:name))
     if @category.save
-      flash[:notice] = "Category created Successfully"
+      flash[:notice] = "Category created successfully."
       redirect_to category_path(@category)
     else
-      render :new
+      flash.now[:validation_errors] = @category.errors.full_messages
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -32,16 +33,18 @@ class CategoriesController < ApplicationController
   def update
     @category = Category.find(params[:id])
     if @category.update(params.require(:category).permit(:name))
-      redirect_to @category, notice: "Category Updated successfully."
+      redirect_to @category, notice: "Category updated successfully."
     else
+      flash.now[:validation_errors] = @category.errors.full_messages
       render :edit, status: :unprocessable_entity
     end
   end
 
   private
+
   def require_admin
-    if !(logged_in? && current_user.admin?)
-      redirect_to categories_path, alert: "You are not authorized to perform this action."
+    unless logged_in? && current_user.admin?
+      redirect_to categories_path, alert: "Access Denied: You are not authorized to perform this action."
     end
   end
 end

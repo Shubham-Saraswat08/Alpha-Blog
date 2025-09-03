@@ -1,0 +1,72 @@
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="bg-white p-4 rounded shadow-sm">
+        <h2 class="mb-4 text-center text-dark fw-semibold">
+          Comments for "<%= @article.title %>"
+        </h2>
+        <% if logged_in? %>
+          <%= form_with(model: [@article, Comment.new], local: true) do |f| %>
+            <div class="mb-3">
+              <%= f.text_area :body, class: "form-control border-0 shadow-sm", placeholder: "Add a comment...", rows: 3, required: true, style: "resize: none; background: #f8f9fa; border-radius: 10px;" %>
+            </div>
+
+            <div class="text-end">
+              <%= f.submit "Submit", class: "btn btn-warning rounded-pill px-4" %>
+            </div>
+          <% end %>
+        <% else %>
+          <div class="alert alert-warning text-center">
+            Please <%= link_to "log in", login_path, class: "alert-link" %> to add a comment.
+          </div>
+        <% end %>
+
+        <!-- Divider -->
+        <hr class="my-4">
+
+        <!-- Comments Header -->
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h5 class="mb-0 text-dark fw-semibold">
+            Comments <span class="badge bg-warning text-dark ms-1"><%= @comments.count %></span>
+          </h5>
+          <small class="text-muted">Most recent</small>
+        </div>
+
+        <!-- Comments Loop -->
+        <% @comments.each do |comment| %>
+          <% user = comment.user %>
+          <% avatar_number = (user&.id.to_i % 8).zero? ? 8 : (user&.id.to_i % 8) %>
+
+          <div class="d-flex mb-4 border-bottom comment-item">
+          <!-- Avatar -->
+          <img src="https://bootdey.com/img/Content/avatar/avatar<%= avatar_number %>.png"
+              alt="User Avatar"
+              class="rounded-circle me-3"
+              style="width: 48px; height: 48px; object-fit: cover;">
+
+          <!-- Comment Content -->
+          <div class="flex-grow-1 d-flex flex-column">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <div>
+                <strong class="text-dark d-block"><%= user&.username || "Anonymous" %></strong>
+                <small class="text-muted"><%= time_ago_in_words(comment.created_at) %> ago</small>
+              </div>
+
+              <% if logged_in? && (current_user == comment.user || current_user.admin?) %>
+                <%= button_to "Delete", article_comment_path(@article, comment),
+                            method: :delete,
+                            data: { confirm: "Are you sure you want to delete this comment?" },
+                            class: "btn btn-warning btn-sm rounded-pill" %>
+              <% end %>
+            </div>
+
+            <p class="mb-0"><%= simple_format(h(comment.body)) %></p>
+          </div>
+        </div>
+
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+</div>

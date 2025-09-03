@@ -14,4 +14,7 @@ class User < ApplicationRecord
                     format: { with: VALID_EMAIL_REGEX, message: "must be a valid email address" }
 
   has_secure_password
+
+  has_many :likes, dependent: :destroy
+  has_many :comments, dependent: :destroy
 end

@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root "users#new"
+  root "session#new"
   resources :articles do
     member do
       post "block"
@@ -7,6 +7,8 @@ Rails.application.routes.draw do
     member do
       post "unblock"
     end
+    resources :likes, only: [ :create, :destroy ]
+    resources :comments, only: [ :index, :create, :destroy ]
   end
   get "signup", to: "users#new"
   resources :users, except: [ :new ] do

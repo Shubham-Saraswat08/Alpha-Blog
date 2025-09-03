@@ -1,14 +1,67 @@
-<div class="container">
+<!-- app/views/shared/_toast.html.erb -->
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1080;">
   <% flash.each do |key, val| %>
-    <% alert_class = key == "notice" ? "alert-success" : "alert-danger" %>
-    <div class="alert <%= alert_class %> alert-dismissible fade show text-center fw-semibold" role="alert">
-      <% if key == "notice" %>
-        <i class="fas fa-check-circle me-2"></i>
-      <% else %>
-        <i class="fas fa-ban me-2"></i>
-      <% end %>
-      <%= val %>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <% toast_type = case key
+        when "notice" then "success"
+        when "alert"  then "error"
+        else key
+      end
+    %>
+
+    <% border_color = {
+        "success" => "#28a745",
+        "error"   => "#dc3545",
+        "warning" => "#ffc107",
+        "info"    => "#0dcaf0"
+      }[toast_type] || "#6c757d" %>
+
+    <% icon_class = {
+        "success" => "fa-check-circle",
+        "error"   => "fa-times-circle",
+        "warning" => "fa-exclamation-triangle",
+        "info"    => "fa-info-circle"
+      }[toast_type] || "fa-info-circle" %>
+
+    <div class="toast show shadow-sm mb-3"
+         role="alert"
+         aria-live="assertive"
+         aria-atomic="true"
+         data-bs-delay="4000"
+         style="
+           max-width: 420px;
+           word-wrap: break-word;
+           word-break: break-word;
+           background-color: #fff;
+           border-left: 5px solid <%= border_color %>;
+           border-radius: 6px;
+           font-size: 0.95rem;">
+      
+      <div class="d-flex align-items-start p-3">
+        <i class="fas <%= icon_class %> me-3 mt-1"
+           style="color: <%= border_color %>; font-size: 1.3rem;"></i>
+
+        <div class="toast-body p-0" style="white-space: normal;">
+          <strong class="d-block text-dark mb-1 text-capitalize" style="font-size: 1rem;">
+            <%= toast_type.capitalize %>
+          </strong>
+          <span class="text-muted" style="font-size: 0.95rem;">
+            <% if val.is_a?(Array) %>
+              <ul class="mb-0">
+                <% val.each do |error| %>
+                  <li><%= error %></li>
+                <% end %>
+              </ul>
+            <% else %>
+              <%= val %>
+            <% end %>
+          </span>
+        </div>
+
+        <button type="button"
+                class="btn-close ms-auto"
+                data-bs-dismiss="toast"
+                aria-label="Close"></button>
+      </div>
     </div>
   <% end %>
 </div>

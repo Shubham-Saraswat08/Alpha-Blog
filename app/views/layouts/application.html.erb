@@ -23,7 +23,9 @@
   <body class="d-flex flex-column mt-0">
     <%= render "layouts/header" %>
     <div id="page-content" class="grey-color">
-      <%= render "layouts/message" %>
+      <div class="container">
+        <%= render "layouts/message" %>
+      </div>
       <%= yield %>
     </div>
     <%= render "layouts/footer" %>

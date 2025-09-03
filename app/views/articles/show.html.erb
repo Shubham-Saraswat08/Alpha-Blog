@@ -1,37 +1,98 @@
 <div class="container">
-    <% if is_blocked && @article.user == current_user %>
-      <div class="alert alert-danger text-center fw-semibold container">
-        <i class="fas fa-ban me-2"></i> This article "<%= @article.title %>" is currently unavailable because the author's profile is blocked.
-      </div>
-    <% elsif @article.is_blocked %>
-      <div class="alert alert-danger text-center fw-semibold container">
-        <i class="fas fa-ban me-2"></i>This article <%= @article.title %> is <strong>blocked</strong>.
-      </div>
-    <% end %>
+  <% if is_blocked && @article.user == current_user %>
+    <div class="alert alert-danger text-center fw-semibold container">
+      <i class="fas fa-ban me-2"></i> This article "<%= @article.title %>" is currently unavailable because the author's profile is blocked.
+    </div>
+  <% elsif @article.is_blocked %>
+    <div class="alert alert-danger text-center fw-semibold container">
+      <i class="fas fa-ban me-2"></i>This article <%= @article.title %> is <strong>blocked</strong>.
+    </div>
+  <% end %>
+
   <h1 class="text-center mt-4"><%= @article.title %></h1>
+
   <div class="row justify-content-center">
     <div class="col-8 mt-4">
       <div class="card text-center shadow mb-5 rounded mint-color <%= 'grayscale-wrapper' if (current_user.admin? || current_user == @article.user) && (is_blocked || @article.is_blocked)%>">
+        
+        <!-- Header -->
         <div class="card-header fst-italic">
-          by <%= link_to @article.user.username, user_path(@article.user), class:"text-decoration-none text-primary" if @article.user%>
+          by <%= link_to @article.user.username, user_path(@article.user), class:"text-decoration-none text-primary" if @article.user %>
           <%= render "/categories/category", categories: @article.categories %>
         </div>
-        <div class="card-body">
-          <div class="card-text text-start pb-3"><%= @article.content.body.to_s.html_safe %></div>
-          <div class="d-flex gap-2 justify-content-center">
-            <%= button_to "Edit", edit_article_path(@article), method: :get, class: "btn btn-outline-primary" if logged_in? && @article.user == current_user%>
-            <% if logged_in? && current_user.admin? && !@article.is_blocked && current_user != @article.user %>
-                <%= button_to "Block", block_article_path(@article), method: :post, class: "btn btn-outline-secondary", data: { turbo_confirm: "Are you sure you want to block this article?" } %>
-              <% end %>
 
-              <% if logged_in? && current_user.admin? && @article.is_blocked && current_user != @article.user %>
-                <%= button_to "Unblock", unblock_article_path(@article), method: :post, class: "btn btn-outline-secondary", data: { turbo_confirm: "Are you sure you want to unblock this article?" } %>
-              <% end %>
-            <%= button_to "Delete", article_path(@article), method: :delete, class: "btn btn-outline-danger", data: { turbo_confirm: "Are you sure you want to delete this article?" } if logged_in? && (current_user.admin? || @article.user == current_user) %>
+        <!-- Body -->
+        <div class="card-body">
+          <div class="card-text text-start pb-3">
+            <%= @article.content.body.to_s.html_safe %>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="d-flex gap-2 justify-content-center">
+            <%= button_to "Edit", edit_article_path(@article), method: :get, class: "btn btn-outline-primary" if logged_in? && @article.user == current_user %>
+
+            <% if logged_in? && current_user.admin? && !@article.is_blocked && current_user != @article.user %>
+              <%= button_to "Block", block_article_path(@article), method: :post, class: "btn btn-outline-secondary", data: { turbo_confirm: "Are you sure you want to block this article?" } %>
+            <% end %>
+
+            <% if logged_in? && current_user.admin? && @article.is_blocked && current_user != @article.user %>
+              <%= button_to "Unblock", unblock_article_path(@article), method: :post, class: "btn btn-outline-secondary", data: { turbo_confirm: "Are you sure you want to unblock this article?" } %>
+            <% end %>
+
+            <% if logged_in? && (current_user.admin? || @article.user == current_user) %>
+              <%= button_to "Delete", article_path(@article), method: :delete, class: "btn btn-outline-danger", data: { turbo_confirm: "Are you sure you want to delete this article?" } %>
+            <% end %>
           </div>
         </div>
+
+        <!-- Like and Comment Section -->
+        <!-- Like and Comment Section -->
+        <div class="card-footer py-3 bg-light">
+          <div class="row text-center">
+            
+            <!-- Like Button -->
+            <div class="col border-end d-flex justify-content-center align-items-center">
+              <% liked = logged_in? && current_user.likes.exists?(article_id: @article.id) %>
+              <% like_count = @article.likes.count %>
+
+              <% if liked %>
+                <% like = current_user.likes.find_by(article_id: @article.id) %>
+                <%= button_to article_like_path(@article, like), method: :delete, class: "border-0 bg-transparent text-primary d-flex flex-column align-items-center py-1", title: "Unlike" do %>
+                  <div class="mb-1">
+                    <i class="fa-solid fa-thumbs-up" style="font-size: 1.6rem;"></i>
+                  </div>
+                  <small class="mt-1"><%= like_count %></small>
+                <% end %>
+              <% else %>
+                <%= button_to article_likes_path(@article), method: :post, class: "border-0 bg-transparent text-muted d-flex flex-column align-items-center py-1", title: "Like" do %>
+                  <div class="mb-1">
+                    <i class="fa-regular fa-thumbs-up" style="font-size: 1.6rem;"></i>
+                  </div>
+                  <small class="mt-1"><%= like_count %></small>
+                <% end %>
+              <% end %>
+            </div>
+
+            <!-- Comment Link -->
+            <div class="col d-flex justify-content-center align-items-center">
+              <%= link_to article_comments_path(@article), class: "text-decoration-none text-dark d-flex flex-column align-items-center py-1", title: "Comments" do %>
+                <div class="mb-1">
+                  <i class="fa-solid fa-comments" style="font-size: 1.6rem;"></i>
+                </div>
+                <small class="mt-1"><%= @article.comments.count %></small>
+              <% end %>
+            </div>
+
+          </div>
+        </div>
+
+
+        <!-- Timestamps -->
         <div class="card-footer text-body-secondary">
-          <small>Created about <%= time_ago_in_words(@article.created_at) %> ago, Edited about <%= time_ago_in_words(@article.updated_at) %> ago</small>
+          <small>
+            Created <%= time_ago_in_words(@article.created_at) %> ago,
+            Edited <%= time_ago_in_words(@article.updated_at) %> ago
+          </small>
         </div>
       </div>
     </div>
