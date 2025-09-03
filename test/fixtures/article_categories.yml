@@ -1,0 +1,11 @@
+one:
+  article: one
+  category: one
+
+two:
+  article: two
+  category: one
+
+three:
+  article: two
+  category: two
