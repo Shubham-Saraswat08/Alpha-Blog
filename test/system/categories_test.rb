@@ -7,7 +7,10 @@ class CategoriesTest < ApplicationSystemTestCase
   end
 
   def sign_in_as(user)
-    post login_path, params: { session: { email: user.email, password: "password" } }
+    visit login_path
+    fill_in "Email", with: user.email
+    fill_in "Password", with: "password"
+    click_on "Login"
   end
 
   test "visiting the index" do
