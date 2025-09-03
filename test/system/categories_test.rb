@@ -23,17 +23,14 @@ class CategoriesTest < ApplicationSystemTestCase
     visit new_category_url
     fill_in "Category Name", with: "New Category"
     click_on "Create Category"
-    assert_text "Category created successfully."
-    click_on "Back"
+    assert_selector ".toast", text: "Category created successfully."
   end
 
   test "should update category as admin" do
     sign_in_as(@admin_user)
-    visit category_url(@category)
-    find('a[title="Edit"]').click
+    visit edit_category_url(@category)
     fill_in "Category Name", with: "Updated Category"
     click_on "Update Category"
-    assert_text "Category updated successfully."
-    click_on "Back"
+    assert_selector ".toast", text: "Category updated successfully."
   end
 end
