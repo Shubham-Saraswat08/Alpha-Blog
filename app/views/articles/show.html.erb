@@ -24,8 +24,9 @@
         <!-- Body -->
         <div class="card-body">
           <div class="card-text text-start pb-3">
-            <%= @article.content.body.to_s.html_safe %>
+            <%= sanitize(@article.content.body.to_s) %>
           </div>
+
 
           <!-- Action Buttons -->
           <div class="d-flex gap-2 justify-content-center">
