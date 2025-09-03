@@ -20,7 +20,7 @@ class UsersController < ApplicationController
       redirect_to users_path
     else
       flash.now[:validation_errors] = @user.errors.full_messages
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 

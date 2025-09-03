@@ -2,8 +2,12 @@ one:
   username: alice
   email: alice@example.com
   password_digest: <%= BCrypt::Password.create('password') %>
-
+  admin: true
+  is_blocked: false
+  
 two:
   username: bob
   email: bob@example.com
   password_digest: <%= BCrypt::Password.create('password') %>
+  admin: false
+  is_blocked: false

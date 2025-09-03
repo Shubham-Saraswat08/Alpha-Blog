@@ -5,7 +5,7 @@ class CategoriesController < ApplicationController
   end
   def show
     @category = Category.find(params[:id])
-    if current_user.admin?
+    if current_user&.admin?
       @categories_article = @category.articles.paginate(page: params[:page], per_page: 2)
     else
       @categories_article = @category.articles.where(is_blocked: false).paginate(page: params[:page], per_page: 2)
@@ -22,7 +22,7 @@ class CategoriesController < ApplicationController
       redirect_to category_path(@category)
     else
       flash.now[:validation_errors] = @category.errors.full_messages
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 

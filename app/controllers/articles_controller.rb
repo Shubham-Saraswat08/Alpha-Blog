@@ -35,10 +35,10 @@ class ArticlesController < ApplicationController
     @article.user = current_user
     if @article.save
       flash[:notice] = "Article created successfully."
-      redirect_back fallback_location: article_path(@article)
+      redirect_to article_path(@article)
     else
       flash.now[:validation_errors] = @article.errors.full_messages
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 

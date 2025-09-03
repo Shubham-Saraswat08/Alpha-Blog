@@ -2,21 +2,20 @@ require "test_helper"
 
 class CategoryTest < ActiveSupport::TestCase
   def setup
-    @category = Category.new(name: "Sports")
+    @category = Category.new(name: "Gaming")  # Use a unique name not in fixtures
   end
 
-  test "Category should be valid" do
+  test "category should be valid" do
     assert @category.valid?
   end
 
-  test "Category should be present" do
+  test "name should be present" do
     @category.name = ""
     assert_not @category.valid?
   end
 
-  test "Category should be unique" do
-    @category.save
-    @category2 = Category.new(name: "Sports")
-    assert_not @category2.valid?
+  test "name should be unique" do
+    duplicate_category = Category.new(name: categories(:one).name)
+    assert_not duplicate_category.valid?
   end
 end
